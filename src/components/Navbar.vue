@@ -11,12 +11,12 @@ const menuItems = [
   },
   {
     label: "Transaction",
-    icon: "pi pi-fw pi-user",
+    icon: "pi pi-fw pi-wallet",
     to: "/v1/transaction",
   },
   {
-    label: "Statistic",
-    icon: "pi pi-fw pi-cog",
+    label: "Statistics",
+    icon: "pi pi-fw pi-chart-bar",
     to: "/v1/statistic",
   },
 ];
@@ -34,12 +34,19 @@ const toggleNavbar = () => {
       miniNavbar ? 'mini-navbar' : 'normal-navbar'
     }`"
   >
+    <div class="h-10">
+      
+    </div>
     <div class="button-group">
       <router-link v-for="item in menuItems" :to="item.to">
         <button
           :class="`menu-button 
           ${currentRoute.path === item.to ? 'menu-active' : ''} 
-          ${currentRoute.path === '/v1' && item.to === '/v1/dashboard' ? 'menu-active' : ''} 
+          ${
+            currentRoute.path === '/v1' && item.to === '/v1/dashboard'
+              ? 'menu-active'
+              : ''
+          } 
           `"
         >
           <i :class="item.icon" class="menu-icon"></i>
@@ -50,9 +57,10 @@ const toggleNavbar = () => {
 
     <button class="close-button" @click="toggleNavbar()">
       <i
-        :class="`pi pi-angle-left duration-500 ${
+        :class="`pi pi-fw pi-angle-left duration-500 ${
           miniNavbar ? '-rotate-180' : ''
         }`"
+        style="color: slateblue"
       ></i>
     </button>
   </div>
@@ -68,7 +76,7 @@ const toggleNavbar = () => {
 }
 
 .mini-navbar {
-  width: 5.5rem;
+  width: 4.5rem;
 }
 
 .normal-navbar {
@@ -79,7 +87,6 @@ const toggleNavbar = () => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-right: 1rem;
 }
 
 .menu-button {
@@ -101,18 +108,14 @@ const toggleNavbar = () => {
   background-color: rgb(0 0 0 / 0.3);
 }
 
-.menu-icon {
+.menu-icon, .menu-label {
   font-size: 1.1rem;
-}
-
-.menu-label {
-  font-size: 1.2rem;
 }
 
 .close-button {
   position: absolute;
   top: 0.9rem;
-  right: -0.9rem;
+  right: -0.95rem;
   padding: 4px 6px 2px 6px;
   background-color: white;
   border: 2px solid var(--p-primary-color);
