@@ -37,9 +37,11 @@ const toggleNavbar = () => {
     <div class="button-group">
       <router-link v-for="item in menuItems" :to="item.to">
         <button
-          :class="`menu-button 
-          ${currentRoute.path === item.to ? 'menu-active' : ''} 
-          ${
+          :class="`menu-button ${
+            currentRoute.path === item.to
+              ? 'menu-active'
+              : 'hover:bg-[rgba(0,0,0,0.3)]'
+          } ${
             currentRoute.path === '/v1' && item.to === '/v1/dashboard'
               ? 'menu-active'
               : ''
@@ -101,11 +103,8 @@ const toggleNavbar = () => {
   color: var(--p-primary-color);
 }
 
-.menu-button:hover {
-  background-color: rgb(0 0 0 / 0.3);
-}
-
-.menu-icon, .menu-label {
+.menu-icon,
+.menu-label {
   font-size: 1.1rem;
 }
 
