@@ -17,10 +17,15 @@ const routes = [
         name: 'Private',
         meta: { authRequired: true },
         component: Main,
-        redirect: '/v1/dashboard',
         children: [
             {
-                path: '/dashboard',
+                path: '',
+                name: 'DashboardIndex',
+                meta: { authRequired: true },
+                component: Dashboard,
+            },
+            {
+                path: 'dashboard',
                 name: 'Dashboard',
                 meta: { authRequired: true },
                 component: Dashboard,

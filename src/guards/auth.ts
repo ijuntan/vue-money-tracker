@@ -7,39 +7,31 @@ export async function authGuard(
     next: NavigationGuardNext
 ) {
     const authStore = useAuthStore();
-    
+
     // Without reloading the page or manually typing the url path, isAuthenticated have the ability to check if the user is authenticated.
-    // If manually typing the url path, need to wait for the loadUser function to finish before checking if the user is authenticated.
+    // If manually typing the url path, authGuard will run before loadUser(), so isAuthenticated will be false.
     if(authStore.isAuthenticated) {
-        if(to.meta.authRequired) {
+        if(!to.meta.authRequired) {
+            return next({ name: 'Private' });
+        } else {
             return next();
-        }
-        else {
-            if(from.name === 'LandingPage' || from.fullPath === '/') {
-                return next({ name: 'Private' });
-            }
-            return next(from.fullPath);
         }
     }
 
-    // Can use loadSession() for a faster loadUser() function. 
     const { session } = await authStore.loadSession();
-    if (session) {
-        // If the route requires authentication and the user is authenticated, let user access.
-        if(to.meta.authRequired) {
+
+    if(session) {
+        if(!to.meta.authRequired) {
+            return next({ name: 'Private' });
+        } else {
             return next();
-        }
-         // If the route requires no authentication and the user is authenticated, redirect to dashboard or the previous page.
-        else {
-            if(from.name === 'LandingPage' || from.fullPath === '/') {
-                return next({ name: 'Private' });
-            }
-            return next(from.fullPath);
         }
     }
 
-    // If the user is not authenticated, redirect to the landing page.
     else {
-        return next({ name: 'LandingPage' });
+        if(to.meta.authRequired)
+            return next({ name: 'LandingPage' });
+        else
+            return next();
     }
 }
