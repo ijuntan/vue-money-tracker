@@ -34,9 +34,6 @@ const toggleNavbar = () => {
       miniNavbar ? 'mini-navbar' : 'normal-navbar'
     }`"
   >
-    <div class="h-10">
-      
-    </div>
     <div class="button-group">
       <router-link v-for="item in menuItems" :to="item.to">
         <button
@@ -114,8 +111,8 @@ const toggleNavbar = () => {
 
 .close-button {
   position: absolute;
-  top: 0.9rem;
-  right: -0.95rem;
+  bottom: 0.9rem;
+  right: -0.75rem;
   padding: 4px 6px 2px 6px;
   background-color: white;
   border: 2px solid var(--p-primary-color);
