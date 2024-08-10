@@ -1,51 +1,20 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { supabase } from "@/supabase";
-import Menubar from "primevue/menubar";
-import Menu from "primevue/menu";
-import UserAvatar from "./UserAvatar.vue";
 
-const avatarMenu = ref<any>(null);
 
-const toggleAvatarMenu = (e: any) => {
-  avatarMenu?.value?.toggle(e);
-};
-
-const signOut = async () => {
-  await supabase.auth.signOut();
-};
-
-const avatarMenuItems = ref([
-  {
-    label: "Sign Out",
-    icon: "pi pi-sign-out",
-    command: signOut,
-  },
-]);
 </script>
 
 <template>
-  <Menubar class="menubar">
-    <template #end>
-      <button @click="toggleAvatarMenu">
-        <UserAvatar />
-      </button>
+  <div class="navbar">
 
-      <Menu
-        ref="avatarMenu"
-        id="overlay_avatar_menu"
-        aria-haspopup="true"
-        aria-controls="overlay_avatar_menu"
-        :model="avatarMenuItems"
-        :popup="true"
-      />
-    </template>
-  </Menubar>
+  </div>
 </template>
 
 <style scoped>
-.menubar {
-    background-color: var(--p-primary-color);
-    border: 0;
+.navbar {
+    background-color: white;
+    width: 20rem;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
 }
 </style>

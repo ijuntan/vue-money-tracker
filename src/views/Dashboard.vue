@@ -7,7 +7,6 @@ import router from '@/routes';
 </script>
 
 <template>
-    <div>
-        Dashboard
+    <div class="">
     </div>
 </template>
