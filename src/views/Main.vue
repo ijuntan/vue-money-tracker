@@ -31,9 +31,5 @@ main {
 
 main > div + div {
     flex: 1;
-    padding: 0.5rem;
-    border-radius: 10px;
-    background-color: white;
-    border: 1px solid #e0e0e0;
 }
 </style>
