@@ -23,10 +23,10 @@ import Navbar from "@/components/Navbar.vue";
 
 main {
     flex: 1;
-    background-color: #eefbd5;
     padding: 1rem;
     gap: 1rem;
     display: flex;
+    background-color: #eefbd5; 
 }
 
 main > div + div {

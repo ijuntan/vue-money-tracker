@@ -3,7 +3,6 @@ import { authGuard } from "@/guards/auth";
 
 import LandingPage from "@/views/LandingPage.vue";
 import Main from "@/views/Main.vue";
-import Dashboard from "@/views/Dashboard.vue";
 
 const routes = [
     {
@@ -20,15 +19,21 @@ const routes = [
         children: [
             {
                 path: '',
-                name: 'DashboardIndex',
+                name: 'Dashboard',
                 meta: { authRequired: true },
-                component: Dashboard,
+                component: import("@/views/Dashboard.vue"),
             },
             {
                 path: 'dashboard',
                 name: 'Dashboard',
                 meta: { authRequired: true },
-                component: Dashboard,
+                component: import("@/views/Dashboard.vue"),
+            },
+            {
+                path: 'transaction',
+                name: 'Transaction',
+                meta: { authRequired: true},
+                component: import("@/views/Transaction.vue"),
             }
         ]
     },
