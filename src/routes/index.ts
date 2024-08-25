@@ -21,19 +21,19 @@ const routes = [
                 path: '',
                 name: 'Dashboard',
                 meta: { authRequired: true },
-                component: import("@/views/Dashboard.vue"),
+                component: () => import("@/views/Dashboard.vue"),
             },
             {
                 path: 'dashboard',
                 name: 'Dashboard',
                 meta: { authRequired: true },
-                component: import("@/views/Dashboard.vue"),
+                component: () => import("@/views/Dashboard.vue"),
             },
             {
                 path: 'transaction',
                 name: 'Transaction',
                 meta: { authRequired: true},
-                component: import("@/views/Transaction.vue"),
+                component: () => import("@/views/Transaction.vue"),
             }
         ]
     },
