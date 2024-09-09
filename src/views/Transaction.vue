@@ -3,127 +3,18 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import DatePicker from "primevue/datepicker";
 import { onMounted, ref } from "vue";
-import { startOfMonth, format, addDays } from "date-fns";
+import { startOfMonth, format } from "date-fns";
 import Button from "primevue/button";
+import { data } from "./dummyTransaction";
+import AddTransactionDialog from "@/components/AddTransactionDialog.vue";
 
 const dateFilter = ref([startOfMonth(new Date()), new Date()]);
 
 const currency = "$";
 
-const transactions = ref([
-  {
-    id: format(new Date(), "yyyyMMdd"),
-    date: new Date(),
-    details: [
-      {
-        id: 1,
-        name: "Income 1",
-        income: 10000,
-      },
-      {
-        id: 2,
-        name: "Income 2",
-        income: 10000,
-      },
-      {
-        id: 3,
-        name: "Expense 1",
-        expense: 6000,
-      },
-      {
-        id: 4,
-        name: "Expense 2",
-        expense: 5000,
-      },
-      {
-        id: 5,
-        name: "Income 1",
-        income: 10000,
-      },
-      {
-        id: 6,
-        name: "Income 2",
-        income: 10000,
-      },
-      {
-        id: 7,
-        name: "Expense 1",
-        expense: 6000,
-      },
-      {
-        id: 8,
-        name: "Expense 2",
-        expense: 5000,
-      },
-      {
-        id: 9,
-        name: "Expense 1",
-        expense: 6000,
-      },
-      {
-        id: 10,
-        name: "Expense 2",
-        expense: 5000,
-      },
-      ],
-  },
-  {
-    id: format(addDays(new Date(), -1) ,"yyyyMMdd"),
-    date: addDays(new Date(), -1),
-    details: [
-      {
-        id: 1,
-        name: "Income 1",
-        income: 10000,
-      },
-      {
-        id: 2,
-        name: "Income 2",
-        income: 10000,
-      },
-      {
-        id: 3,
-        name: "Expense 1",
-        expense: 6000,
-      },
-      {
-        id: 4,
-        name: "Expense 2",
-        expense: 5000,
-      },
-      {
-        id: 5,
-        name: "Income 1",
-        income: 10000,
-      },
-      {
-        id: 6,
-        name: "Income 2",
-        income: 10000,
-      },
-      {
-        id: 7,
-        name: "Expense 1",
-        expense: 6000,
-      },
-      {
-        id: 8,
-        name: "Expense 2",
-        expense: 5000,
-      },
-      {
-        id: 9,
-        name: "Expense 1",
-        expense: 6000,
-      },
-      {
-        id: 10,
-        name: "Expense 2",
-        expense: 5000,
-      },
-      ],
-  },
-]);
+const transactions = ref(data);
+
+const addTransactionModal = ref(false);
 
 const expandedRows = ref({});
 
@@ -172,7 +63,7 @@ onMounted(() => {
             <div class="flex gap-2">
               <Button text icon="pi pi-plus" label="Expand All" @click="expandAll" />
               <Button text icon="pi pi-minus" label="Collapse All" @click="collapseAll" />  
-              <Button label="Transaction" icon="pi pi-plus" @onclick="() => {}" />
+              <Button label="Transaction" icon="pi pi-plus" @click="() => addTransactionModal=true" />
             </div>
           </div>
         </template>
@@ -218,12 +109,15 @@ onMounted(() => {
       </DataTable>
     </div>
   </div>
+
+  <AddTransactionDialog :visible="addTransactionModal" @close="addTransactionModal=false"/>
 </template>
 
 <style scoped>
 .dashboard-layout {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
   gap: 1rem;
   border-radius: 10px;
 }
