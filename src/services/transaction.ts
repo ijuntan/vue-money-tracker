@@ -8,7 +8,7 @@ const fetchTransactions = async () => {
 		.select(`
 			id,
 			amount,
-			tag:tag!inner (
+			tag (
 				label,
 				transaction_type
 			),
@@ -18,6 +18,7 @@ const fetchTransactions = async () => {
 			updated_at
 		`)
 		.eq("user_id", useAuthStore().currentUser?.id)
+		.order("date", { ascending: false})
 		.returns<TransactionResponse[]>()
 		;
 

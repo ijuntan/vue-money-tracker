@@ -39,46 +39,34 @@ const onKeyUp = (e: KeyboardEvent) => {
 
 onMounted(() => {
   expandAll();
-  // id: format(new Date(), "yyyyMMdd"),
-  //   date: new Date(),
-  //   details: [
-  //     {
-  //       id: 1,
-  //       name: "Income 1",
-  //       income: 10000,
-  //     },
+
   fetchTransactions()
   .then((res) => {
     if(res) {
-      const data = res.reduce<TransactionTableObject>((acc, t) => {
-        const formattedDate = format(t.date, "yyyyMMdd");
-        if (acc[formattedDate]) {
-          acc[formattedDate].details.push({
-            id: t.id,
-            name: t.description,
-            income: t.tag.transaction_type === "INC" ? t.amount : undefined,
-            expense: t.tag.transaction_type === "EXP" ? t.amount : undefined,
+      const dateMap = new Map();
+      res.forEach((data) => {
+        const formattedDate = format(data.date, "yyyyMMdd");
+        if(dateMap.has(formattedDate)) {
+          dateMap.get(formattedDate).details.push({
+            id: data.id,
+            name: data.description,
+            income: data.tag.transaction_type === "INC" ? data.amount : undefined,
+            expense: data.tag.transaction_type === "EXP" ? data.amount : undefined,
           });
-        } else {
-          acc[formattedDate] = {
-            id: format(t.date, "yyyyMMdd"),
-            date: new Date(t.date),
-            details: [
-              {
-                id: t.id,
-                name: t.description,
-                income: t.tag.transaction_type === "INC" ? t.amount : undefined,
-                expense: t.tag.transaction_type === "EXP" ? t.amount : undefined,
-              },
-            ],
-          };
         }
-        return acc;
-      }, {});
-      
-      transactions.value = Object.values(data);
+        else {
+          dateMap.set(formattedDate, { id: formattedDate, date: data.date, details: [{
+            id: data.id,
+            name: data.description,
+            income: data.tag.transaction_type === "INC" ? data.amount : undefined,
+            expense: data.tag.transaction_type === "EXP" ? data.amount : undefined,
+          }]});
+        }
+      })
+      transactions.value = Array.from(dateMap.values());
     }
   });
+
   // Check for key up T for add transaction modal
   window.addEventListener("keyup", onKeyUp);
 });
@@ -95,6 +83,7 @@ onUnmounted(() => {
         v-model:expandedRows="expandedRows"
         :value="transactions"
         dataKey="id"
+        removable-sort
         scrollable
         scroll-height="600px"
       >
@@ -126,8 +115,8 @@ onUnmounted(() => {
           </div>
         </template>
 
-        <Column expander class="bg-slate-100" style="width: 3rem"></Column>
-        <Column field="date" header="Date" class="bg-slate-100">
+        <Column expander class="bg-slate-100/50" style="width: 3rem"></Column>
+        <Column sortable field="date" header="Date" class="bg-slate-100/50">
           <template #body="{ data }">
             <div>
               {{ format(data.date, "dd MMMM yyyy") }}
