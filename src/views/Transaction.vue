@@ -5,15 +5,14 @@ import DatePicker from "primevue/datepicker";
 import { onMounted, onUnmounted, ref } from "vue";
 import { startOfMonth, format } from "date-fns";
 import Button from "primevue/button";
-import { data } from "./dummyTransaction";
 import AddTransaction from "@/components/AddTransaction.vue";
 import { fetchTransactions } from "@/services/transaction";
-import { TransactionResponse, TransactionTableMap, TransactionTableObject } from "@/types";
+import { TransactionTableMap, TransactionTableObject } from "@/types";
 
 const dateFilter = ref([startOfMonth(new Date()), new Date()]);
 const currency = "$";
 
-const transactions = ref([]);
+const transactions = ref<TransactionTableMap[]>([]);
 
 const addTransactionModal = ref(false);
 
@@ -57,8 +56,8 @@ onMounted(() => {
           acc[formattedDate].details.push({
             id: t.id,
             name: t.description,
-            income: t.tag.transaction_type === "INC" ? t.amount : null,
-            expense: t.tag.transaction_type === "EXP" ? t.amount : null,
+            income: t.tag.transaction_type === "INC" ? t.amount : undefined,
+            expense: t.tag.transaction_type === "EXP" ? t.amount : undefined,
           });
         } else {
           acc[formattedDate] = {
@@ -68,8 +67,8 @@ onMounted(() => {
               {
                 id: t.id,
                 name: t.description,
-                income: t.tag.transaction_type === "INC" ? t.amount : null,
-                expense: t.tag.transaction_type === "EXP" ? t.amount : null,
+                income: t.tag.transaction_type === "INC" ? t.amount : undefined,
+                expense: t.tag.transaction_type === "EXP" ? t.amount : undefined,
               },
             ],
           };
@@ -189,7 +188,9 @@ onUnmounted(() => {
   flex: 1;
   border-radius: 10px;
   padding: 0.5rem;
-  transition: all 0.5s
+  transition: all 0.5s;
+  margin: 1rem;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 :deep(.p-datatable-header) {

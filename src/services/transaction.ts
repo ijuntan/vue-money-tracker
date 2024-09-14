@@ -8,7 +8,7 @@ const fetchTransactions = async () => {
 		.select(`
 			id,
 			amount,
-			tag (
+			tag:tag!inner (
 				label,
 				transaction_type
 			),
@@ -17,7 +17,9 @@ const fetchTransactions = async () => {
 			created_at,
 			updated_at
 		`)
-		.eq("user_id", useAuthStore().currentUser?.id);
+		.eq("user_id", useAuthStore().currentUser?.id)
+		.returns<TransactionResponse[]>()
+		;
 
 	if (error) {
 		console.error("Error fetching transactions", error);

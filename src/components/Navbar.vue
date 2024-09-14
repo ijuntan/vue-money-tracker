@@ -70,6 +70,7 @@ const toggleNavbar = () => {
   position: relative;
   background-color: var(--p-primary-color);
   padding: 1rem;
+  margin: 1rem;
   border-radius: 10px;
   box-shadow: 0 15px 15px -15px rgb(0 0 0 / 0.3);
 }

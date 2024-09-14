@@ -164,6 +164,9 @@ onMounted(() => {
   flex-direction: column;
   gap: 1rem;
   padding: 2rem;
+  margin: 1rem 0rem;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 .v-enter-active,

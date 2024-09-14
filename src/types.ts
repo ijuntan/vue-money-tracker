@@ -20,9 +20,9 @@ export interface TransactionResponse{
 
 type TransactionDetail = {
     id: string;
+    name: string;
     income?: number;
     expense?: number;
-    description: string;
 }
 
 export interface TransactionTableMap {

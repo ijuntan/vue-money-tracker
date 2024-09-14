@@ -32,8 +32,6 @@ onMounted(() => {
 
 main {
   flex: 1;
-  padding: 1rem;
-  gap: 1rem;
   display: flex;
   background-color: #eefbd5;
 }
