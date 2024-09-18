@@ -11,10 +11,13 @@ import { deleteTransaction, fetchTransactions } from "@/services/transaction";
 import { AddTransactionResponse, TransactionTableMap } from "@/types";
 import { useGlobalStore } from "@/stores/global";
 import { thousandSeparator } from "@/utils/numberFormatter";
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 
+const confirm = useConfirm();
+const toast = useToast();
 const dateFilter = ref([startOfMonth(new Date()), new Date()]);
 const currency = "$";
-
 const transactions = ref<TransactionTableMap[]>([]);
 
 const addTransactionModal = ref(false);
@@ -23,6 +26,37 @@ const expandedRows = ref({});
 
 const global = useGlobalStore();
 const tagOptions = computed(() => global.tagOptions);
+
+const handleDeleteTransaction = (event: Event, id: string) => {
+  confirm.require({
+    target: event.target as HTMLElement,
+    message: 'Are you sure you want to delete?',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true
+    },
+    acceptProps: {
+        label: 'Save'
+    },
+    accept: async() => {
+      toast.add({ severity: 'success', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+      try {
+        await deleteTransaction(id);
+        transactions.value = transactions.value.map((t) => {
+            t.details = t.details.filter((d) => d.id !== id);
+            t.incTotal = t.details.reduce((acc, d) => d.income ? acc + d.income : acc, 0);
+            t.expTotal = t.details.reduce((acc, d) => d.expense ? acc + d.expense : acc, 0);
+            return t;
+          });
+        transactions.value = transactions.value.filter((t) => t.details.length > 0);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+};
 
 const addTransactionLocally = (transaction: AddTransactionResponse) => {
   const transactionDate = format(transaction.date, "yyyyMMdd");
@@ -55,21 +89,6 @@ const addTransactionLocally = (transaction: AddTransactionResponse) => {
         expense: tag?.transaction_type === "EXP" ? transaction.amount : undefined,
       }]
     });
-  }
-};
-
-const handleDeleteTransaction = async (id: string) => {
-  try {
-    await deleteTransaction(id);
-    transactions.value = transactions.value.map((t) => {
-      t.details = t.details.filter((d) => d.id !== id);
-      t.incTotal = t.details.reduce((acc, d) => d.income ? acc + d.income : acc, 0);
-      t.expTotal = t.details.reduce((acc, d) => d.expense ? acc + d.expense : acc, 0);
-      return t;
-    });
-    transactions.value = transactions.value.filter((t) => t.details.length > 0);
-  } catch (error) {
-    console.error(error);
   }
 };
 
@@ -238,7 +257,7 @@ onMounted(async() => {
                     icon="pi pi-trash"
                     class="icon-button"
                     severity="danger"
-                    @click="handleDeleteTransaction(data.id)"
+                    @click="handleDeleteTransaction($event, data.id)"
                   />
                 </div>
               </template>
