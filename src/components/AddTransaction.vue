@@ -4,6 +4,7 @@ import DatePicker from "primevue/datepicker";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Select from "primevue/select";
+import InputNumber from "primevue/inputnumber";
 import { useGlobalStore } from "@/stores/global";
 import { addTransaction } from "@/services/transaction";
 import { Transaction } from "@/types";
@@ -14,7 +15,7 @@ const props = defineProps({
   visible: Boolean,
 });
 
-const emits = defineEmits(["close"]);
+const emits = defineEmits(["close", "addTransactionLocally"]);
 
 const data = reactive<Transaction>({
   date: new Date(),
@@ -34,13 +35,15 @@ const resetData = () => {
 
 const handleAddTransaction = async() => {
 	try {
-		await addTransaction(data);
+		const res = await addTransaction(data);
+    emits("addTransactionLocally", res);
 		resetData();
 		emits("close");
 	} catch (error) {
 		console.error(error);
 	}
-}
+};
+
 watch(
 	() => props.visible,
 	(val) => {
@@ -93,11 +96,10 @@ onMounted(() => {
 
       <div>
         <label for="amount" class="block mb-2">Amount</label>
-        <InputText 
+        <InputNumber
 					id="amount"
 					name="amount"
 					v-model="data.amount"
-					@keyup.enter="emits('close')"
 				/>
       </div>
 

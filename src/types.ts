@@ -18,6 +18,16 @@ export interface TransactionResponse{
     updated_at: string | null;
 }
 
+export interface AddTransactionResponse{
+    id: string;
+    amount: number;
+    description: string;
+    tag: string;
+    date: string;
+    created_at: string;
+    updated_at: string | null;
+}
+
 type TransactionDetail = {
     id: string;
     name: string;
@@ -28,6 +38,8 @@ type TransactionDetail = {
 export interface TransactionTableMap {
     id: string;
     date: Date;
+    incTotal: number;
+    expTotal: number;
     details: TransactionDetail[];
 }
 

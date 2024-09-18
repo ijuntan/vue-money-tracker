@@ -6,6 +6,7 @@ import { useAuthStore } from "./auth";
 type TagOption = {
     id: string;
     name: string;
+	transaction_type: string;
 };
 
 export const useGlobalStore = defineStore("global", () => {
@@ -15,7 +16,7 @@ export const useGlobalStore = defineStore("global", () => {
 	const fetchTagOptions = async () => {
 		const { data, error } = await supabase
 			.from("tag")
-			.select("id, label")
+			.select("id, label, transaction_type")
 			.eq("user_id", authStore.currentUser?.id);
 
 		if (error) {
@@ -25,7 +26,8 @@ export const useGlobalStore = defineStore("global", () => {
 
 		tagOptions.value = data.map((data) => ({
 			id: data.id,
-			name: data.label
+			name: data.label,
+			transaction_type: data.transaction_type,
 		})) || [];
 	};
 

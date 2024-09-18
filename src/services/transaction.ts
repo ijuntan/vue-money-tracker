@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/stores/auth";
 import { supabase } from "@/supabase";
-import { Transaction, TransactionResponse } from "@/types";
+import { AddTransactionResponse, Transaction, TransactionResponse } from "@/types";
 
 const fetchTransactions = async () => {
 	const { data, error } = await supabase
@@ -38,14 +38,15 @@ const addTransaction = async (transaction:Transaction) => {
 
   const { data, error } = await supabase
     .from("transaction")
-    .insert(t);
+    .insert(t)
+	.select();
 
   if (error) {
     console.error("Error adding transaction", error);
     return;
   }
-
-  return (data as (TransactionResponse[]|null));
+  
+  return (data[0] as (AddTransactionResponse|null));
 };
 
 interface TransactionWithId extends Transaction {
